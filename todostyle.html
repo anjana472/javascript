@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Todo List</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+}
+
+h1 {
+  text-align: center;
+}
+
+#todoInput {
+  width: 70%;
+  padding: 8px;
+  margin-bottom: 10px;
+}
+
+button {
+  padding: 8px 20px;
+  background-color: #af4c4c;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #5145a0;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  padding: 10px;
+  margin-bottom: 5px;
+  background-color: #f2f2f2;
+  border-radius: 5px;
+}
+
+</style>
+</head>
+<body>
+    <h1>Todo List</h1>
+    <input type="text" id="todoInput" placeholder="Add new todo">
+    <button onclick="addTodo()">Add Todo</button>
+    <ul id="todoList"></ul>
+    
+    <script>
+    
+    function editTodo(li) {
+      var newText = prompt("Edit the todo:", li.textContent);
+      if (newText !== null && newText !== "") {
+        li.textContent = newText;
+      }
+    }
+    
+    
+    function deleteTodo(li) {
+      li.parentNode.removeChild(li);
+    }
+    
+    
+    function handleTodoActions(event) {
+      var target = event.target;
+      if (target.classList.contains('edit-icon')) {
+        editTodo(target.parentElement);
+      } else if (target.classList.contains('delete-icon')) {
+        deleteTodo(target.parentElement);
+      }
+    }
+    
+    
+    document.getElementById("todoList").addEventListener("click", handleTodoActions);
+    
+    
+    function addTodo() {
+      var input = document.getElementById("todoInput").value;
+      if (input === "") {
+        alert("Please enter a todo.");
+        return;
+      }
+      var li = document.createElement("li");
+      li.textContent = input;
+    
+    
+      var editIcon = document.createElement("i");
+      editIcon.className = "fas fa-edit edit-icon";
+      editIcon.style.marginRight = "5px";
+      li.appendChild(editIcon);
+    
+      
+      var deleteIcon = document.createElement("i");
+      deleteIcon.className = "fas fa-trash-alt delete-icon";
+      deleteIcon.style.marginLeft = "10px";
+      li.appendChild(deleteIcon);
+    
+      document.getElementById("todoList").appendChild(li);
+      document.getElementById("todoInput").value = "";
+    }
+    
+    document.getElementById("todoInput").addEventListener("keypress", function(event) {
+      if (event.keyCode === 13) {
+        addTodo();
+      }
+    });
+        
+</script>
+</body>
+</html>
