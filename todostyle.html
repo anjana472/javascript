@@ -41,7 +41,7 @@ ul {
 li {
   padding: 10px;
   margin-bottom: 5px;
-  background-color: #f2f2f2;
+  background-color: #dae4da;
   border-radius: 5px;
 }
 
@@ -50,68 +50,61 @@ li {
 <body>
     <h1>Todo List</h1>
     <input type="text" id="todoInput" placeholder="Add new todo">
-    <button onclick="addTodo()">Add Todo</button>
+    <button id="addTodo">Add Todo</button>
     <ul id="todoList"></ul>
     
     <script>
-    
-    function editTodo(li) {
-      var newText = prompt("Edit the todo:", li.textContent);
-      if (newText !== null && newText !== "") {
-        li.textContent = newText;
-      }
-    }
-    
-    
-    function deleteTodo(li) {
-      li.parentNode.removeChild(li);
-    }
-    
-    
-    function handleTodoActions(event) {
-      var target = event.target;
-      if (target.classList.contains('edit-icon')) {
-        editTodo(target.parentElement);
-      } else if (target.classList.contains('delete-icon')) {
-        deleteTodo(target.parentElement);
-      }
-    }
-    
-    
-    document.getElementById("todoList").addEventListener("click", handleTodoActions);
-    
-    
-    function addTodo() {
-      var input = document.getElementById("todoInput").value;
-      if (input === "") {
-        alert("Please enter a todo.");
-        return;
-      }
-      var li = document.createElement("li");
-      li.textContent = input;
-    
-    
-      var editIcon = document.createElement("i");
-      editIcon.className = "fas fa-edit edit-icon";
-      editIcon.style.marginRight = "5px";
-      li.appendChild(editIcon);
-    
-      
-      var deleteIcon = document.createElement("i");
-      deleteIcon.className = "fas fa-trash-alt delete-icon";
-      deleteIcon.style.marginLeft = "10px";
-      li.appendChild(deleteIcon);
-    
-      document.getElementById("todoList").appendChild(li);
-      document.getElementById("todoInput").value = "";
-    }
-    
-    document.getElementById("todoInput").addEventListener("keypress", function(event) {
-      if (event.keyCode === 13) {
-        addTodo();
-      }
+    const input = document.getElementById("todoInput");
+    const btn = document.getElementById("addTodo");
+    const tasks = document.getElementById("todoList");
+
+    btn.addEventListener("click", function(e) {
+        try {
+            let text = input.value;
+
+            if (text === "") {
+                throw new Error("Task is empty!");
+            }
+
+            const newtask = document.createElement("li");
+            newtask.classList.add("task");
+
+            newtask.addEventListener('dblclick', () => {
+                newtask.classList.add('line-through');
+            });
+
+            let addvalue = document.createElement("span");
+            addvalue.innerHTML = text;
+            newtask.appendChild(addvalue);
+
+            let toEdit = document.createElement("button");
+            toEdit.classList.add("editt");
+            toEdit.innerHTML = '<i class="fas fa-pen"></i>';
+            newtask.appendChild(toEdit);
+
+            let toDelete = document.createElement("button");
+            toDelete.classList.add("editt");
+            toDelete.innerHTML = '<i class="fas fa-trash"></i>';
+            newtask.appendChild(toDelete);
+
+            toEdit.addEventListener("click", () => {
+                let val = prompt("Edit please");
+                if (val !== null) {
+                    addvalue.innerHTML = val;
+                }
+            });
+
+            toDelete.addEventListener("click", () => {
+                newtask.remove();
+            });
+
+            tasks.appendChild(newtask);
+
+            input.value = "";
+        } catch (error) {
+            alert(error.message);
+        }
     });
-        
-</script>
+    </script>
 </body>
 </html>
